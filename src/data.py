@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import re
+
 pd.set_option('display.max_rows', None) 
 pd.set_option('display.max_columns', None) 
 
@@ -75,5 +76,3 @@ def get_table():
     data = pd.merge(data, data_solskenstid, on='Datum', how='outer')
 
     return(data)
-
-get_table()
