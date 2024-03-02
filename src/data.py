@@ -66,10 +66,10 @@ def weather_parameter_10(folder_path):
     
 
 def get_weather_table():
-    data_lufttemperatur = weather_average_by_day("../data/wettersol/wettersol/smhi_data_2022-today/parameter_2/", "AverageLufttemperatur")
-    data_nederbordsmangd = weather_average_by_day("../data/wettersol/wettersol/smhi_data_2022-today/parameter_5/", "AverageNederbördsmängd")
-    data_snodjup = weather_average_by_day("../data/wettersol/wettersol/smhi_data_2022-today/parameter_8/", "AverageSnödjup", ["Kvalitet", "Tid (UTC)"])
-    data_solskenstid = weather_parameter_10("../data/wettersol/wettersol/smhi_data_2022-today/parameter_10/")
+    data_lufttemperatur = weather_average_by_day("../data/wettersol/smhi_data_2022-today/parameter_2/", "AverageLufttemperatur")
+    data_nederbordsmangd = weather_average_by_day("../data/wettersol/smhi_data_2022-today/parameter_5/", "AverageNederbördsmängd")
+    data_snodjup = weather_average_by_day("../data/wettersol/smhi_data_2022-today/parameter_8/", "AverageSnödjup", ["Kvalitet", "Tid (UTC)"])
+    data_solskenstid = weather_parameter_10("../data/wettersol/smhi_data_2022-today/parameter_10/")
 
     data = pd.merge(data_lufttemperatur, data_nederbordsmangd, on='Datum', how='outer')
     data = pd.merge(data, data_snodjup, on='Datum', how='outer')
@@ -78,7 +78,7 @@ def get_weather_table():
     return(data)
 
 def get_table(zip_code):
-    data_company = get_data("../data/wettersol/" + zip_code + ".csv")
+    data_company = get_data("../data/" + zip_code + ".csv")
     data_weather = get_weather_table()
     data_company.rename(columns={'Date': 'Datum'}, inplace=True)
     data_company['Datum'] = pd.to_datetime(data_company['Datum'])
