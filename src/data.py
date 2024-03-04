@@ -84,5 +84,6 @@ def get_table(zip_code):
     data_company['Datum'] = pd.to_datetime(data_company['Datum'])
     data = pd.merge(data_weather, data_company, on='Datum', how='inner')
     data = data.dropna()
+    data["EnergyProduced_Panel1"] = data["EnergyProduced_Panel1"].str.replace(',', '.').astype(float)
 
     return data
