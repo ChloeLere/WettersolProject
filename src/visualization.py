@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from xgboost import XGBRegressor
 
 
-class TimeSeriesForcasting:
+class Visualization:
     def __init__(self, data):
         self.data = data
         self.data = self.data.set_index('Datum')
