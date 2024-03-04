@@ -83,5 +83,6 @@ def get_table(zip_code):
     data_company.rename(columns={'Date': 'Datum'}, inplace=True)
     data_company['Datum'] = pd.to_datetime(data_company['Datum'])
     data = pd.merge(data_weather, data_company, on='Datum', how='inner')
+    data = data.dropna()
 
     return data
