@@ -87,3 +87,11 @@ def get_table(zip_code):
     data["EnergyProduced_Panel1"] = data["EnergyProduced_Panel1"].str.replace(',', '.').astype(float)
 
     return data
+
+# Split the dataframe between:
+# X: Variables
+# y: Target Prediction
+def split_xy(dataframe, target_col_name):
+    x = dataframe.drop(columns=target_col_name)
+    y = dataframe[target_col_name]
+    return x, y
