@@ -12,6 +12,7 @@ def main(argv):
     tsf = Visualization(data)
     tsf.visualization_energy()
     tsf.visualization_every_column()
+    tsf.visualization_with_weather()
     return 0
 
 if __name__ == "__main__":

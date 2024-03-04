@@ -3,13 +3,14 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from xgboost import XGBRegressor
+from sklearn.preprocessing import MinMaxScaler
+
 
 
 class Visualization:
     def __init__(self, data):
         self.data = data
         self.data = self.data.set_index('Datum')
-        print(data.tail())
 
 
     def visualization_energy(self):
@@ -76,13 +77,17 @@ class Visualization:
         # Show the plot
         plt.show()
     
+    def normalize(self):
+        return pd.DataFrame(MinMaxScaler().fit_transform(self.data), columns=self.data.columns, index=self.data.index)
+    
     def visualization_with_weather(self):
+        normalize_data = self.normalize()
         plt.figure(figsize=(10, 6))
-        plt.plot(self.data.index, self.data["EnergyProduced_Panel1"], label="EnergyProduced_Panel1")
-        plt.plot(self.data.index, self.data["AverageLufttemperatur"], label="AverageLufttemperatur")
-        plt.plot(self.data.index, self.data["AverageNederbördsmängd"], label="AverageNederbördsmängd")
-        plt.plot(self.data.index, self.data["AverageSnödjup"], label="AverageSnödjup")
-        plt.plot(self.data.index, self.data["AverageSolskenstid"], label="AverageSolskenstid")
+        plt.plot(normalize_data.index, normalize_data["EnergyProduced_Panel1"], label="EnergyProduced_Panel1")
+        plt.plot(normalize_data.index, normalize_data["AverageLufttemperatur"], label="AverageLufttemperatur")
+        plt.plot(normalize_data.index, normalize_data["AverageNederbördsmängd"], label="AverageNederbördsmängd")
+        plt.plot(normalize_data.index, normalize_data["AverageSnödjup"], label="AverageSnödjup")
+        plt.plot(normalize_data.index, normalize_data["AverageSolskenstid"], label="AverageSolskenstid")
         plt.xlabel("Date")
         plt.ylabel("Energy Production")
         plt.title("Energy Production Over Time")
