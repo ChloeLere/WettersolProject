@@ -77,6 +77,13 @@ def get_weather_table():
 
     return(data)
 
+def get_capacity_from_zip(zip_code):
+    capacities = get_data("../data/installed_capacity.csv")
+    capacities = capacities.rename(columns={"56392,0": "Zip_Code", "15,21": "Capacity"})
+    capacities["Capacity"] = capacities["Capacity"].str.replace(',', '.').astype(float)
+    capacity = capacities[capacities["Zip_Code"] == int(zip_code)]["Capacity"].unique()
+    return capacity[0]
+
 def get_table(zip_code):
     data_company = get_data("../data/" + zip_code + ".csv")
     data_weather = get_weather_table()
@@ -85,7 +92,7 @@ def get_table(zip_code):
     data = pd.merge(data_weather, data_company, on='Datum', how='inner')
     data = data.dropna()
     data["EnergyProduced_Panel1"] = data["EnergyProduced_Panel1"].str.replace(',', '.').astype(float)
-
+    data["Capacity"] = get_capacity_from_zip(zip_code)
     return data
 
 # Split the dataframe between:
