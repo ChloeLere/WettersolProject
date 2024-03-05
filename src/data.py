@@ -84,14 +84,25 @@ def get_capacity_from_zip(zip_code):
     capacity = capacities[capacities["Zip_Code"] == int(zip_code)]["Capacity"].unique()
     return capacity[0]
 
-def get_table(zip_code):
+def get_energy_produced_panel(zip_code):
     data_company = get_data("../data/" + zip_code + ".csv")
-    data_weather = get_weather_table()
     data_company.rename(columns={'Date': 'Datum'}, inplace=True)
     data_company['Datum'] = pd.to_datetime(data_company['Datum'])
+    data_company['EnergyProduced_Panel1'] = data_company['EnergyProduced_Panel1'].str.replace(',', '.').astype(float)
+    if (len(data_company.columns) > 2):
+        data_company['EnergyProduced_Panel2'] = data_company['EnergyProduced_Panel2'].str.replace(',', '.').astype(float)
+        data_company['EnergyProduced'] = data_company['EnergyProduced_Panel1'] + data_company['EnergyProduced_Panel2']
+        data_company = data_company.drop(['EnergyProduced_Panel1', 'EnergyProduced_Panel2'], axis=1)
+    else:
+        data_company.rename(columns={'EnergyProduced_Panel1': 'EnergyProduced'}, inplace=True)
+    
+    return data_company
+
+def get_table(zip_code):
+    data_weather = get_weather_table()
+    data_company = get_energy_produced_panel(zip_code)
     data = pd.merge(data_weather, data_company, on='Datum', how='inner')
     data = data.dropna()
-    data["EnergyProduced_Panel1"] = data["EnergyProduced_Panel1"].str.replace(',', '.').astype(float)
     data["Capacity"] = get_capacity_from_zip(zip_code)
     return data
 
