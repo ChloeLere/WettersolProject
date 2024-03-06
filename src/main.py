@@ -14,6 +14,7 @@ def main(argv):
     visualizations.visualization_energy()
     visualizations.visualization_every_column()
     visualizations.visualization_with_weather()
+    visualizations.visualization_with_radiation()
     #variables, target = split_xy(data, "EnergyProduced")
     return 0
 

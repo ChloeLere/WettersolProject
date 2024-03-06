@@ -16,7 +16,7 @@ class Visualization:
     def visualization_energy(self):
         plt.figure(figsize=(10, 12))
 
-        plt.plot(self.data.index, self.data["EnergyProduced_Panel1"])
+        plt.plot(self.data.index, self.data["EnergyProduced"])
         plt.xlabel("Date")
         plt.ylabel("Energy Production")
         plt.title("Energy Production Over Time")
@@ -29,7 +29,7 @@ class Visualization:
 
         # First subplot
         plt.subplot(5, 1, 1)
-        plt.plot(self.data.index, self.data["EnergyProduced_Panel1"])
+        plt.plot(self.data.index, self.data["EnergyProduced"])
         plt.xlabel("Date")
         plt.ylabel("Energy Production")
         plt.title("Energy Production Over Time")
@@ -37,7 +37,7 @@ class Visualization:
 
         # Second subplot
         plt.subplot(5, 1, 2)
-        plt.plot(self.data.index, self.data["AverageLufttemperatur"], label="AverageLufttemperatur")
+        plt.plot(self.data.index, self.data["AverageLufttemperatur"], label="Average Temperature")
         plt.xlabel("Date")
         plt.ylabel("Average Temperature")
         plt.title("Average Temperature Over Time")
@@ -46,7 +46,7 @@ class Visualization:
 
         # Third subplot
         plt.subplot(5, 1, 3)
-        plt.plot(self.data.index, self.data["AverageNederbördsmängd"], label="AverageNederbördsmängd")
+        plt.plot(self.data.index, self.data["AverageNederbördsmängd"], label="Precipitation")
         plt.xlabel("Date")
         plt.ylabel("Precipitation")
         plt.title("Precipitation Over Time")
@@ -55,7 +55,7 @@ class Visualization:
 
         # Fourth subplot
         plt.subplot(5, 1, 4)
-        plt.plot(self.data.index, self.data["AverageSnödjup"], label="AverageSnödjup")
+        plt.plot(self.data.index, self.data["AverageSnödjup"], label="Snow Depth")
         plt.xlabel("Date")
         plt.ylabel("Snow Depth")
         plt.title("Snow Depth Over Time")
@@ -64,7 +64,7 @@ class Visualization:
 
         # Fifth subplot
         plt.subplot(5, 1, 5)
-        plt.plot(self.data.index, self.data["AverageSolskenstid"], label="AverageSolskenstid")
+        plt.plot(self.data.index, self.data["AverageSolskenstid"], label="Sunshine Duration")
         plt.xlabel("Date")
         plt.ylabel("Sunshine Duration")
         plt.title("Sunshine Duration Over Time")
@@ -83,15 +83,38 @@ class Visualization:
     def visualization_with_weather(self):
         normalize_data = self.normalize()
         plt.figure(figsize=(10, 6))
-        plt.plot(normalize_data.index, normalize_data["EnergyProduced_Panel1"], label="EnergyProduced_Panel1")
-        plt.plot(normalize_data.index, normalize_data["AverageLufttemperatur"], label="AverageLufttemperatur")
-        plt.plot(normalize_data.index, normalize_data["AverageNederbördsmängd"], label="AverageNederbördsmängd")
-        plt.plot(normalize_data.index, normalize_data["AverageSnödjup"], label="AverageSnödjup")
-        plt.plot(normalize_data.index, normalize_data["AverageSolskenstid"], label="AverageSolskenstid")
+        plt.plot(normalize_data.index, normalize_data["EnergyProduced"], label="Energy Produced")
+        plt.plot(normalize_data.index, normalize_data["AverageLufttemperatur"], label="Average Temperature")
+        plt.plot(normalize_data.index, normalize_data["AverageNederbördsmängd"], label="Precipitation")
+        plt.plot(normalize_data.index, normalize_data["AverageSnödjup"], label="Snow Depth")
+        plt.plot(normalize_data.index, normalize_data["AverageSolskenstid"], label="Sunshine Duration")
         plt.xlabel("Date")
         plt.ylabel("Energy Production")
         plt.title("Energy Production Over Time")
         plt.legend()
         plt.grid(True)
         plt.show()
-    
+
+    def visualization_with_radiation(self):
+        plt.figure(figsize=(10, 12))
+
+        # First subplot
+        plt.subplot(2, 1, 1)
+        plt.plot(self.data.index, self.data["EnergyProduced"])
+        plt.xlabel("Date")
+        plt.ylabel("Energy Production")
+        plt.title("Energy Production Over Time")
+        plt.grid(True)
+
+        # Second subplot
+        plt.subplot(2, 1, 2)
+        plt.plot(self.data.index, self.data["UV-irradiation"], label="UV irradiation")
+        plt.xlabel("Date")
+        plt.ylabel("UV irradiation")
+        plt.title("UV irradiation Over Time")
+        plt.legend()
+        plt.grid(True)
+
+        plt.tight_layout()
+
+        plt.show()
