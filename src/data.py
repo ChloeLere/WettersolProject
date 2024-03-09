@@ -98,12 +98,17 @@ def get_energy_produced_panel(zip_code):
     
     return data_company
 
+def get_radiation():
+    data_radiation = get_data("../data/solar_radiation.csv")
+    data_radiation.replace(-999, float("NaN"), inplace=True)
+    data_radiation['Datum'] = pd.to_datetime(data_radiation['Datum'])
+    data_radiation['UV-irradiation'].interpolate(method='linear', inplace=True)
+    return data_radiation
+
 def get_table(zip_code):
     data_weather = get_weather_table()
     data_company = get_energy_produced_panel(zip_code)
-    data_radiation = get_data("../data/solar_radiation.csv")
-    data_radiation['Datum'] = pd.to_datetime(data_radiation['Datum'])
-
+    data_radiation = get_radiation()
     data = pd.merge(data_weather, data_radiation, on='Datum', how='inner')
     data = pd.merge(data, data_company, on='Datum', how='inner')
     data = data.dropna()
