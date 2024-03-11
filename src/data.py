@@ -113,6 +113,7 @@ def get_table(zip_code):
     data = pd.merge(data, data_company, on='Datum', how='inner')
     data = data.dropna()
     data["Capacity"] = get_capacity_from_zip(zip_code)
+    data = data.set_index('Datum')
     return data
 
 # Split the dataframe between:
