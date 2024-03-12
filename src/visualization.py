@@ -10,7 +10,6 @@ from sklearn.preprocessing import MinMaxScaler
 class Visualization:
     def __init__(self, data):
         self.data = data
-        self.data = self.data.set_index('Datum')
 
 
     def visualization_energy(self):
@@ -108,6 +107,20 @@ class Visualization:
 
         # Second subplot
         plt.subplot(2, 1, 2)
+        plt.plot(self.data.index, self.data["UV-irradiation"], label="UV irradiation")
+        plt.xlabel("Date")
+        plt.ylabel("UV irradiation")
+        plt.title("UV irradiation Over Time")
+        plt.legend()
+        plt.grid(True)
+
+        plt.tight_layout()
+
+        plt.show()
+
+    def visualization_radiation(self):
+        plt.figure(figsize=(10, 12))
+
         plt.plot(self.data.index, self.data["UV-irradiation"], label="UV irradiation")
         plt.xlabel("Date")
         plt.ylabel("UV irradiation")

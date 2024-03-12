@@ -123,3 +123,12 @@ def split_xy(dataframe, target_col_name):
     x = dataframe.drop(columns=target_col_name)
     y = dataframe[target_col_name]
     return x, y
+
+def time_split(variables, target, offset=0, training_size=100, testing_size=50):
+    if offset + training_size + testing_size > len(target):
+        raise ValueError("offset + training_size + testing_size > len(self.target)")
+    X_train = variables[offset:offset + training_size]
+    y_train = target[offset:offset + training_size]
+    X_test = variables[offset + training_size:offset + training_size + testing_size]
+    y_test = target[offset + training_size:offset + training_size + testing_size]
+    return X_train, y_train, X_test, y_test

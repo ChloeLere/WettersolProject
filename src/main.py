@@ -5,6 +5,7 @@ from data import get_table, split_xy
 from visualization import Visualization
 import pandas as pd
 from lstm import MyLSTM
+from autoregressive import MyAutoregressive
 
 def main(argv):
     zip_code = 18645
@@ -17,14 +18,19 @@ def main(argv):
     #visualizations.visualization_energy()
     #visualizations.visualization_every_column()
     #visualizations.visualization_with_weather()
-    #visualizations.visualization_with_radiation()
+    #visualizations.visualization_radiation()
     
     # Split the data :
     variables, target = split_xy(data, "EnergyProduced")
 
     # Long Short Term Memory :
-    lstm = MyLSTM(variables, target)
-    lstm.train_model()
+    #lstm = MyLSTM(variables, target)
+    #lstm.train_model()
+
+    # Autegressive
+
+    ar = MyAutoregressive(data, lags=5)
+    ar.train()
 
     #Random forest :
 
