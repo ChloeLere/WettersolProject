@@ -37,6 +37,15 @@ class MyLSTM:
 
         return X_train, y_train, X_val, y_val, X_test, y_test
 
+    def time_split(self, offset=0, training_size=100, testing_size=50):
+        if offset + training_size + testing_size > len(self.target):
+            raise ValueError("offset + training_size + testing_size > len(self.target)")
+        X_train = self.variables[offset:offset + training_size]
+        y_train = self.target[offset:offset + training_size]
+        X_test = self.variables[offset + training_size:offset + training_size + testing_size]
+        y_test = self.target[offset + training_size:offset + training_size + testing_size]
+        return X_train, y_train, X_test, y_test
+
     def get_model(self):
         
 
@@ -63,14 +72,16 @@ class MyLSTM:
     
     
     def train_model(self):
-        x_train, y_train, x_val, y_val, x_test, y_test = self.split_data()
+        #x_train, y_train, x_val, y_val, x_test, y_test = self.split_data()
 
+        x_train, y_train, x_test, y_test = self.time_split()
         #callbacks = [keras.callbacks.EarlyStopping(monitor='val_loss', patience=2,verbose=0)]
         #self.model.fit(x_train, y_train, epochs=100, batch_size=32, verbose=1,validation_split=0.05, callbacks=callbacks)
         
-        self.model.fit(x_train, y_train, epochs=50, batch_size=32, validation_data=(x_val, y_val), verbose=1)
+        self.model.fit(x_train, y_train, epochs=100, batch_size=32, verbose=1)
 
         loss = self.model.evaluate(x_test, y_test)
+        print(loss)
 
         predictions = self.model.predict(x_test)
  
