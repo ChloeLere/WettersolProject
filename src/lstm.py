@@ -53,8 +53,7 @@ class MyLSTM:
         print(self.y_test[0])
 
 
-    def additional_metrics(self):
-    # Calculate additional evaluation metrics
+    def metrics(self):
         to_test = self.x_test.reshape((1, self.test_size, 6))
         predictions = np.array(self.model.predict(to_test)).flatten()
         true_y = np.array(self.y_test)

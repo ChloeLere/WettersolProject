@@ -28,7 +28,7 @@ def main(argv):
     #lstm = MyLSTM(variables, target)
     #lstm.train()
     #lstm.evaluate_loss()
-    #mse, mae, rmse = lstm.additional_metrics()
+    #mse, mae, rmse = lstm.metrics()
 
     # Autegressive
 
