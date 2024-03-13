@@ -6,6 +6,7 @@ from visualization import Visualization
 import pandas as pd
 from lstm import MyLSTM
 from autoregressive import MyAutoregressive
+from randomForest import MyRandomforest
 
 def main(argv):
     zip_code = 18645
@@ -24,10 +25,10 @@ def main(argv):
     variables, target = split_xy(data, "EnergyProduced")
 
     # Long Short Term Memory (need to call everything in this order):
-    lstm = MyLSTM(variables, target)
-    lstm.train()
-    lstm.evaluate_loss()
-    mse, mae, rmse = lstm.additional_metrics()
+    #lstm = MyLSTM(variables, target)
+    #lstm.train()
+    #lstm.evaluate_loss()
+    #mse, mae, rmse = lstm.additional_metrics()
 
     # Autegressive
 
@@ -35,6 +36,8 @@ def main(argv):
     #ar.train()
 
     #Random forest :
+    rf = MyRandomforest(variables, target, lags=5)
+    rf.train_model()
 
     return 0
 
