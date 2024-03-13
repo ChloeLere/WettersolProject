@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
-from data import get_table, split_xy
+from data import get_table, split_xy, plot_metrics
 from visualization import Visualization
 import pandas as pd
-from lstm import MyLSTM
+#from lstm import MyLSTM
 from autoregressive import MyAutoregressive
 from randomForest import MyRandomforest
 
@@ -32,12 +32,15 @@ def main(argv):
 
     # Autegressive
 
-    #ar = MyAutoregressive(data, lags=5)
-    #ar.train()
+    ar = MyAutoregressive(data, lags=5)
+    ar.train()
+    ar_metrics = ar.metrics()
 
     #Random forest :
     rf = MyRandomforest(variables, target, lags=5)
     rf.train_model()
+
+    plot_metrics([ar_metrics], ["AutoRegression"])
 
     return 0
 
