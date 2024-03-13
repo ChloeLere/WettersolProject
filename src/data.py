@@ -154,3 +154,29 @@ def time_split(variables, target, offset=0, training_size=100, testing_size=50):
     X_test = variables[offset + training_size:offset + training_size + testing_size]
     y_test = target[offset + training_size:offset + training_size + testing_size]
     return X_train, y_train, X_test, y_test
+
+def plot_metrics(metrics, labels):
+    
+    mse_values = [metric[0] for metric in metrics]
+    mae_values = [metric[1] for metric in metrics]
+    rmse_values = [metric[2] for metric in metrics]
+    r_squared_values = [metric[3] for metric in metrics]
+
+    bar_width = 0.25
+    num_models = len(metrics)
+    index = index = np.arange(num_models)
+
+    fig, ax = plt.subplots()
+    #mse_bars = ax.bar(index, mse_values, bar_width, label='MSE')
+    mae_bars = ax.bar(index + bar_width, mae_values, bar_width, label='MAE')
+    rmse_bars = ax.bar(index + bar_width * 2, rmse_values, bar_width, label='RMSE')
+    r_squared_bars = ax.bar(index + bar_width * 3, r_squared_values, bar_width, label='R2')
+
+    ax.set_xlabel('Model')
+    ax.set_ylabel('Loss')
+    ax.set_title('Comparison of Loss Functions')
+    ax.set_xticks(index + 1.5 * bar_width)
+    ax.set_xticklabels(labels)
+    ax.legend()
+
+    plt.show()
