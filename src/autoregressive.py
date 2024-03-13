@@ -26,6 +26,12 @@ class MyAutoregressive:
         self.mae = 0.0
         self.r_squared = 0.0
 
+    def clamp_negative(self, predictions):
+        for i in range(len(predictions)):
+            if predictions[i] < 0:
+                predictions[i] = 0
+        return predictions
+
     def train(self, offset=0):
         x_train, y_train, x_test, y_test = time_split(self.variables, self.target, testing_size=5, offset=offset, training_size=400)
         
@@ -34,6 +40,7 @@ class MyAutoregressive:
         print('Coefficients: %s' % model_fit.params)
         predictions = model_fit.predict(start=len(x_train), end=len(x_train) + len(x_test) - 1, exog_oos=x_test)
 
+        predictions = self.clamp_negative(predictions)
         for i in range(len(predictions)):
             print('predicted=%f, expected=%f' % (predictions[i], y_test[i]))
         
