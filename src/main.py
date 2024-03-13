@@ -8,7 +8,7 @@ from lstm import MyLSTM
 from autoregressive import MyAutoregressive
 
 def main(argv):
-    zip_code = 18645
+    zip_code = 51455
     if len(argv) > 1:
         zip_code = argv[1]
     data: pd.DataFrame = get_table(str(zip_code))
