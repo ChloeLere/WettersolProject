@@ -4,7 +4,7 @@ import sys
 from data import get_table, split_xy, plot_metrics
 from visualization import Visualization
 import pandas as pd
-#from lstm import MyLSTM
+from lstm import MyLSTM
 from autoregressive import MyAutoregressive
 from randomForest import MyRandomforest
 
@@ -25,10 +25,10 @@ def main(argv):
     variables, target = split_xy(data, "EnergyProduced")
 
     # Long Short Term Memory (need to call everything in this order):
-    #lstm = MyLSTM(variables, target)
-    #lstm.train()
-    #lstm.evaluate_loss()
-    #mse, mae, rmse = lstm.metrics()
+    lstm = MyLSTM(variables, target)
+    lstm.train()
+    lstm.evaluate_loss()
+    lstm_metrics = lstm.metrics()
 
     # Autegressive
 
@@ -40,7 +40,7 @@ def main(argv):
     rf = MyRandomforest(variables, target, lags=5)
     rf.train_model()
 
-    plot_metrics([ar_metrics], ["AutoRegression"])
+    plot_metrics([ar_metrics, lstm_metrics], ["AutoRegression", "LSTM"])
 
     return 0
 

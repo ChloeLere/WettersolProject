@@ -6,7 +6,7 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import numpy as np
 
 class MyLSTM:
@@ -60,9 +60,11 @@ class MyLSTM:
         mse = mean_squared_error(true_y, predictions)
         mae = mean_absolute_error(true_y, predictions)
         rmse = np.sqrt(mse)
+        r_squared = r2_score(true_y, predictions)
 
         print("Mean Squared Error:", mse)
         print("Mean Absolute Error:", mae)
         print("Root Mean Squared Error:", rmse)
+        print("R Squared score:", r_squared)
 
-        return mse, mae, rmse
+        return mse, mae, rmse, r_squared
