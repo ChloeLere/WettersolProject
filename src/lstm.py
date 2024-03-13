@@ -1,87 +1,56 @@
-import matplotlib.pyplot as plt
-import pandas as pd
-import datetime as dt
-import os
-import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-import os
+from data import time_split
+from keras.preprocessing.sequence import TimeseriesGenerator
 
-
-import pandas as pd
-import numpy as np
-import typing
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import LSTM
 import matplotlib.pyplot as plt
 
-import tensorflow as tf
-import keras
-from keras import layers
-from keras import ops
-from keras.models import Sequential
-from keras.layers import LSTM, Dense, Input, TimeDistributed, Activation, Dropout
-from sklearn.model_selection import train_test_split
-
-os.environ["KERAS_BACKEND"] = "tensorflow"
+import numpy as np
 
 class MyLSTM:
-    def __init__(self, variables, target, test_size = 0.5, val_size = 0.2):
-
+    def __init__(self, variables, target, test_size = 7, training_size = 320):
         self.variables = variables
         self.target = target
         self.test_size = test_size
-        self.valid_size = val_size
-        self.model = self.get_model()
-
-    def split_data(self, random_state=42):
-        X_train_val, X_test, y_train_val, y_test = train_test_split(self.variables, self.target, test_size=self.test_size, random_state=random_state)
-        X_train, X_val, y_train, y_val = train_test_split(X_train_val, y_train_val, test_size=self.valid_size, random_state=random_state)
-
-        return X_train, y_train, X_val, y_val, X_test, y_test
-
-    def time_split(self, offset=0, training_size=100, testing_size=50):
-        if offset + training_size + testing_size > len(self.target):
-            raise ValueError("offset + training_size + testing_size > len(self.target)")
-        X_train = self.variables[offset:offset + training_size]
-        y_train = self.target[offset:offset + training_size]
-        X_test = self.variables[offset + training_size:offset + training_size + testing_size]
-        y_test = self.target[offset + training_size:offset + training_size + testing_size]
-        return X_train, y_train, X_test, y_test
-
-    def get_model(self):
-        
-
+        self.x_train, self.y_train, self.x_test, self.y_test = time_split(variables, target, training_size=training_size, testing_size=test_size)
+        self.scaler = MinMaxScaler()
+        self.scaler.fit(self.x_train)
+        self.x_train = self.scaler.transform(self.x_train)
+        self.x_test = self.scaler.transform(self.x_test)
+        self.model, self.generator = self.create_model()
+     
+    
+    def create_model(self):
+        n_features = 6
+        n_input = self.test_size
+        generator = TimeseriesGenerator(self.x_train, self.y_train, length=n_input, batch_size=1)
         model = Sequential()
+        model.add(LSTM(100, activation='relu', input_shape=(n_input, n_features)))
+        model.add(Dense(7))
+
+        return model, generator
     
-        # hidden layer 1
-        model.add(LSTM(100, 
-                    input_shape=(50,1), 
-                    return_sequences=True))
-        model.add(Dropout(0.2))
+    def train(self, epochs=50):
 
-        # hidden layer 2
-        model.add(LSTM(100))
-        model.add(Dropout(0.2))
-
-        # output layer
-        model.add(Dense(1))
-        model.add(Activation("linear"))
-
-
-        model.compile(optimizer='adam', loss='mean_squared_error')
+        self.model.compile(optimizer='adam', loss='mse')
+        self.model.summary()
+        self.model.fit(self.generator,epochs=epochs, verbose=1)
         
-        return model
-    
-    
-    def train_model(self):
-        #x_train, y_train, x_val, y_val, x_test, y_test = self.split_data()
+    def evaluate_loss(self):
+        loss_per_epoch = self.model.history.history['loss']
+        plt.plot(range(len(loss_per_epoch)),loss_per_epoch)
+        plt.show()
 
-        x_train, y_train, x_test, y_test = self.time_split()
-        #callbacks = [keras.callbacks.EarlyStopping(monitor='val_loss', patience=2,verbose=0)]
-        #self.model.fit(x_train, y_train, epochs=100, batch_size=32, verbose=1,validation_split=0.05, callbacks=callbacks)
-        
-        self.model.fit(x_train, y_train, epochs=100, batch_size=32, verbose=1)
+    def predict(self):
+        to_test = self.x_test.reshape((1, self.test_size, 6))
+        res = self.model.predict(to_test)
+        print(res)
+        print(self.y_test[0])
 
-        loss = self.model.evaluate(x_test, y_test)
-        print(loss)
 
-        predictions = self.model.predict(x_test)
- 
+   
+
+
+

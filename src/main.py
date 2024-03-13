@@ -8,7 +8,7 @@ from lstm import MyLSTM
 from autoregressive import MyAutoregressive
 
 def main(argv):
-    zip_code = 51455
+    zip_code = 18645
     if len(argv) > 1:
         zip_code = argv[1]
     data: pd.DataFrame = get_table(str(zip_code))
@@ -24,13 +24,14 @@ def main(argv):
     variables, target = split_xy(data, "EnergyProduced")
 
     # Long Short Term Memory :
-    #lstm = MyLSTM(variables, target)
-    #lstm.train_model()
+    lstm = MyLSTM(variables, target)
+    lstm.train()
+    lstm.evaluate_loss()
 
     # Autegressive
 
-    ar = MyAutoregressive(data, lags=5)
-    ar.train()
+    #ar = MyAutoregressive(data, lags=5)
+    #ar.train()
 
     #Random forest :
 
