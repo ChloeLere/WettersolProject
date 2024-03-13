@@ -21,6 +21,10 @@ class MyAutoregressive:
         self.target = target
         self.variables = variables
 
+        self.mse = 0.0
+        self.rmse = 0.0
+        self.mae = 0.0
+        self.r_squared = 0.0
 
     def train(self, offset=0):
         x_train, y_train, x_test, y_test = time_split(self.variables, self.target, testing_size=5, offset=offset, training_size=400)
@@ -33,17 +37,17 @@ class MyAutoregressive:
         for i in range(len(predictions)):
             print('predicted=%f, expected=%f' % (predictions[i], y_test[i]))
         
-        mse = mean_squared_error(y_test, predictions)
-        rmse = mse ** 0.5
-        print(f'Root Mean Squared Error (RMSE): {rmse}')
+        self.mse = mean_squared_error(y_test, predictions)
+        self.rmse = self.mse ** 0.5
+        print(f'Root Mean Squared Error (RMSE): {self.rmse}')
 
-        r2 = r2_score(y_test, predictions)
-        print(f"R Squared score: {r2}")
+        self.r_squared = r2_score(y_test, predictions)
+        print(f"R Squared score: {self.r_squared}")
 
-        mae = mean_absolute_error(y_test, predictions)
-        print("Mean Absolute Error:", mae)
+        self.mae = mean_absolute_error(y_test, predictions)
+        print("Mean Absolute Error:", self.mae)
 
-
+    # don't use
     def train_2(self):
         for i in range(1, self.lags+1):
             self.data[f'lag_{i}'] = self.data['EnergyProduced'].shift(i)
@@ -66,3 +70,7 @@ class MyAutoregressive:
         #predictions = model_fit.predict(start=len(x_train), end=len(x_train) + len(x_test) - 1, exog_oos=x_test)    
         for i in range(len(y_pred)):
             print('predicted=%f, expected=%f' % (y_pred[i], y_test[i]))
+
+    # get the metrics of the last train run
+    def metrics(self):
+        return self.mse, self.mae, self.rmse, self.r_squared
