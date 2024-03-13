@@ -23,10 +23,11 @@ def main(argv):
     # Split the data :
     variables, target = split_xy(data, "EnergyProduced")
 
-    # Long Short Term Memory :
+    # Long Short Term Memory (need to call everything in this order):
     lstm = MyLSTM(variables, target)
     lstm.train()
     lstm.evaluate_loss()
+    mse, mae, rmse = lstm.additional_metrics()
 
     # Autegressive
 
