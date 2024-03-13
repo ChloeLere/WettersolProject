@@ -5,9 +5,9 @@ import os
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from statsmodels.tsa.ar_model import AutoReg
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 import os
-from data import time_split, split_xy
+from data import time_split, split_xy, find_duplicate_dates
 from sklearn.model_selection import TimeSeriesSplit
 
 class MyAutoregressive:
@@ -21,17 +21,28 @@ class MyAutoregressive:
         self.target = target
         self.variables = variables
 
-    def train(self):
 
-        x_train, y_train, x_test, y_test = time_split(self.variables, self.target, testing_size=7)
+    def train(self, offset=0):
+        x_train, y_train, x_test, y_test = time_split(self.variables, self.target, testing_size=5, offset=offset, training_size=400)
         
-        model = AutoReg(y_train, lags=5, exog=x_train)
+        model = AutoReg(y_train, lags=self.lags, exog=x_train)
         model_fit = model.fit()
         print('Coefficients: %s' % model_fit.params)
         predictions = model_fit.predict(start=len(x_train), end=len(x_train) + len(x_test) - 1, exog_oos=x_test)
 
         for i in range(len(predictions)):
             print('predicted=%f, expected=%f' % (predictions[i], y_test[i]))
+        
+        mse = mean_squared_error(y_test, predictions)
+        rmse = mse ** 0.5
+        print(f'Root Mean Squared Error (RMSE): {rmse}')
+
+        r2 = r2_score(y_test, predictions)
+        print(f"R Squared score: {r2}")
+
+        mae = mean_absolute_error(y_test, predictions)
+        print("Mean Absolute Error:", mae)
+
 
     def train_2(self):
         for i in range(1, self.lags+1):
