@@ -18,6 +18,14 @@ def plot_data(data, xlabel, ylabel, graph_name):
     plt.title(graph_name)
     plt.show()
 
+def remove_snow_duplicate(dataframe: pd.DataFrame):
+    to_drop = []
+    for idx, row in dataframe.iterrows():
+        if row["Tid (UTC)"] != "06:00:00":
+            to_drop.append(idx)
+    dataframe = dataframe.drop(to_drop)
+    return dataframe
+
 def weather_average_by_day(folder_path, column_name_average, column_to_rm = ["Kvalitet"]):
     files = os.listdir(folder_path)
     first_round = True
@@ -29,7 +37,13 @@ def weather_average_by_day(folder_path, column_name_average, column_to_rm = ["Kv
             merged_data = pd.read_csv(folder_path + filename).drop(columns=column_to_rm)
             first_round = False
             continue
-        current = pd.read_csv(folder_path + filename).drop(columns=column_to_rm)
+
+        current = pd.read_csv(folder_path + filename)
+
+        if column_name_average == "AverageSnödjup":
+            current = remove_snow_duplicate(current)
+
+        current = current.drop(columns=column_to_rm)
         station_number = re.findall(r'\d+', filename)[0]
         merged_data = pd.merge(merged_data, current, on='Datum', how='outer', suffixes=('', f'_{station_number}'))
 
@@ -111,10 +125,18 @@ def get_table(zip_code):
     data_radiation = get_radiation()
     data = pd.merge(data_weather, data_radiation, on='Datum', how='inner')
     data = pd.merge(data, data_company, on='Datum', how='inner')
+    data = data.drop_duplicates()
     data = data.dropna()
     data["Capacity"] = get_capacity_from_zip(zip_code)
     data = data.set_index('Datum')
     return data
+
+def find_duplicate_dates(dataframe:pd.DataFrame):
+    temp = ""
+    for idx, row in dataframe.iterrows():
+        if temp == idx:
+            print(temp)
+        temp = idx
 
 # Split the dataframe between:
 # X: Variables
