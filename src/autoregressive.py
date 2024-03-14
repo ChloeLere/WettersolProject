@@ -1,14 +1,6 @@
-import matplotlib.pyplot as plt
-import pandas as pd
-import datetime as dt
-import os
-import numpy as np
-from sklearn.preprocessing import MinMaxScaler
 from statsmodels.tsa.ar_model import AutoReg
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-import os
-from data import time_split, split_xy, find_duplicate_dates
-from sklearn.model_selection import TimeSeriesSplit
+from data import time_split, split_xy
 
 class MyAutoregressive:
     def __init__(self, data, test_size = 0.5, val_size = 0.2, lags = 5):
@@ -46,16 +38,11 @@ class MyAutoregressive:
         
         self.mse = mean_squared_error(y_test, predictions)
         self.rmse = self.mse ** 0.5
-        print(f'Root Mean Squared Error (RMSE): {self.rmse}')
-
         self.r_squared = r2_score(y_test, predictions)
-        print(f"R Squared score: {self.r_squared}")
-
         self.mae = mean_absolute_error(y_test, predictions)
-        print("Mean Absolute Error:", self.mae)
 
     # don't use
-    def train_2(self):
+    def train_2_unused(self):
         for i in range(1, self.lags+1):
             self.data[f'lag_{i}'] = self.data['EnergyProduced'].shift(i)
         self.data.dropna(inplace=True)
@@ -80,4 +67,9 @@ class MyAutoregressive:
 
     # get the metrics of the last train run
     def metrics(self):
+        print("============================AutoRegressive============================")
+        print("Mean Squared Error:", self.mse)
+        print("Mean Absolute Error:", self.mae)
+        print("Root Mean Squared Error:", self.rmse)
+        print("R Squared score:", self.r_squared)
         return self.mse, self.mae, self.rmse, self.r_squared

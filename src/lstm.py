@@ -62,7 +62,7 @@ class MyLSTM:
         rmse = np.sqrt(mse)
         r_squared = r2_score(true_y, predictions)
 
-        print("========================Long short term momery========================")
+        print("========================Long short term memory========================")
         print("Mean Squared Error:", mse)
         print("Mean Absolute Error:", mae)
         print("Root Mean Squared Error:", rmse)
