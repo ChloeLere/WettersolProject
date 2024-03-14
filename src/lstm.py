@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import numpy as np
 
 class MyLSTM:
-    def __init__(self, variables, target, test_size = 4, training_size = 320):
+    def __init__(self, variables, target, test_size = 5, training_size = 400):
         self.variables = variables
         self.target = target
         self.test_size = test_size

@@ -10,7 +10,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
 
 class MyRandomforest:
-    def __init__(self, variables, target, test_size = 4, training_size = 320):
+    def __init__(self, variables, target, test_size = 5, training_size = 400):
         self.mse = 0.0
         self.rmse = 0.0
         self.mae = 0.0
@@ -31,8 +31,8 @@ class MyRandomforest:
         best_params = grid_search.best_params_
         print("Best hyperparameters:", best_params)
 
-    def create_model(self):
-        model = RandomForestRegressor(n_estimators=200, max_depth=20, min_samples_split=2, random_state=42)
+    def create_model(self, max_depth = 10, min_samples_split = 2, n_estimators = 200):
+        model = RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, min_samples_split=min_samples_split, random_state=42)
         return model
 
     def train(self):
