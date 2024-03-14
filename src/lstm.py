@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import numpy as np
 
 class MyLSTM:
-    def __init__(self, variables, target, test_size = 4, training_size = 320, batch_size=32):
+    def __init__(self, variables, target, test_size = 4, training_size = 320):
         self.variables = variables
         self.target = target
         self.test_size = test_size
@@ -20,8 +20,6 @@ class MyLSTM:
         self.x_train = self.scaler.transform(self.x_train)
         self.x_test = self.scaler.transform(self.x_test)
         self.model, self.generator = self.create_model()
-        self.batch_size = batch_size
-
         
     
     def create_model(self):
@@ -34,16 +32,18 @@ class MyLSTM:
 
         return model, generator
     
-    def train(self, epochs=100):
+    def train(self, summarize=False, epochs=100, batch_size=32):
         self.model.compile(optimizer='adam', loss='mse')
-        self.model.summary()
-        self.model.fit(self.generator, epochs=epochs, batch_size=self.batch_size, verbose=1)
+        if summarize:
+            self.model.summary()
+        self.model.fit(self.generator, epochs=epochs, batch_size=batch_size, verbose=1)
 
         
-    def evaluate_loss(self):
+    def evaluate_loss(self, display=False):
         loss_per_epoch = self.model.history.history['loss']
-        plt.plot(range(len(loss_per_epoch)),loss_per_epoch)
-        plt.show()
+        if display:
+            plt.plot(range(len(loss_per_epoch)),loss_per_epoch)
+            plt.show()
         return loss_per_epoch
     
     def predict(self):
@@ -62,6 +62,7 @@ class MyLSTM:
         rmse = np.sqrt(mse)
         r_squared = r2_score(true_y, predictions)
 
+        print("========================Long short term momery========================")
         print("Mean Squared Error:", mse)
         print("Mean Absolute Error:", mae)
         print("Root Mean Squared Error:", rmse)
