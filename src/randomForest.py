@@ -16,7 +16,15 @@ class MyRandomforest:
         self.lags = lags
         self.target = target
         self.variables = variables
+
+        self.mse = 0.0
+        self.rmse = 0.0
+        self.mae = 0.0
+        self.r_squared = 0.0
     
+    def param_tuning(self):
+        pass
+
     def train_model(self):
 
         x_train, y_train, x_test, y_test = time_split(self.variables, self.target, testing_size=7)
@@ -46,3 +54,18 @@ class MyRandomforest:
         
         n_splits = 5
         tscv = TimeSeriesSplit(n_splits=n_splits)
+    
+    # get the metrics of the last train run
+    def metrics(self):
+        print("=================================Random  Forest=================================")
+        print("Mean Squared Error:", self.mse)
+        print("Mean Absolute Error:", self.mae)
+        print("Root Mean Squared Error:", self.rmse)
+        print("R Squared score:", self.r_squared)
+        return self.mse, self.mae, self.rmse, self.r_squared
+
+# tuning ailleur
+# tuning into new train
+# good split
+# remove useless params
+# get metrics
