@@ -24,8 +24,8 @@ class MyAutoregressive:
                 predictions[i] = 0
         return predictions
 
-    def train(self, offset=0):
-        x_train, y_train, x_test, y_test = time_split(self.variables, self.target, testing_size=5, offset=offset, training_size=400)
+    def train(self, offset=0, training_size=320, testing_size=5):
+        x_train, y_train, x_test, y_test = time_split(self.variables, self.target, offset=offset, training_size=training_size, testing_size=testing_size)
         
         model = AutoReg(y_train, lags=self.lags, exog=x_train)
         model_fit = model.fit()
@@ -67,7 +67,7 @@ class MyAutoregressive:
 
     # get the metrics of the last train run
     def metrics(self):
-        print("============================AutoRegressive============================")
+        print("=================================AutoRegressive=================================")
         print("Mean Squared Error:", self.mse)
         print("Mean Absolute Error:", self.mae)
         print("Root Mean Squared Error:", self.rmse)

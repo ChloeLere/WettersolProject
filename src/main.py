@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-from data import get_table, split_xy, plot_metrics
-from visualization import Visualization
+from data import get_table, split_xy, plot_metrics, visualize_data
 import pandas as pd
 from lstm import MyLSTM
 from autoregressive import MyAutoregressive
@@ -15,25 +14,20 @@ def main(argv):
     data: pd.DataFrame = get_table(str(zip_code))
 
     # Visualization of the data :
-    #visualizations = Visualization(data)
-    #visualizations.visualization_energy()
-    #visualizations.visualization_every_column()
-    #visualizations.visualization_with_weather()
-    #visualizations.visualization_radiation()
+    #visualize_data(data)
     
     # Split the data :
     variables, target = split_xy(data, "EnergyProduced")
 
     # Long Short Term Memory (need to call everything in this order):
-    lstm = MyLSTM(variables, target)
+    lstm = MyLSTM(variables, target, 5, 400)
     lstm.train()
     lstm.evaluate_loss()
     lstm_metrics = lstm.metrics()
 
     # Autegressive
-
     ar = MyAutoregressive(data, lags=5)
-    ar.train()
+    ar.train(0, 400, 5)
     ar_metrics = ar.metrics()
 
     #Random forest :

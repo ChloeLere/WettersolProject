@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import re
+from visualization import Visualization
 
 pd.set_option('display.max_rows', None) 
 pd.set_option('display.max_columns', None) 
@@ -180,3 +181,10 @@ def plot_metrics(metrics, labels):
     ax.legend()
 
     plt.show()
+
+def visualize_data(data):
+    visualizations = Visualization(data)
+    visualizations.visualization_energy()
+    visualizations.visualization_every_column()
+    visualizations.visualization_with_weather()
+    visualizations.visualization_radiation()
