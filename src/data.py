@@ -187,4 +187,5 @@ def visualize_data(data):
     visualizations.visualization_energy()
     visualizations.visualization_every_column()
     visualizations.visualization_with_weather()
+    visualizations.visualization_with_radiation()
     visualizations.visualization_radiation()

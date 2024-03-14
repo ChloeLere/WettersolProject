@@ -8,7 +8,7 @@ from autoregressive import MyAutoregressive
 from randomForest import MyRandomforest
 
 def main(argv):
-    zip_code = 18645
+    zip_code = 55448
     if len(argv) > 1:
         zip_code = argv[1]
     data: pd.DataFrame = get_table(str(zip_code))
@@ -28,13 +28,16 @@ def main(argv):
     # Autegressive
     ar = MyAutoregressive(data, lags=5)
     ar.train(0, 400, 5)
+    ar.predict()
     ar_metrics = ar.metrics()
 
     #Random forest :
-    rf = MyRandomforest(variables, target, lags=5)
-    rf.train_model()
+    rf = MyRandomforest(variables, target)
+    rf.train()
+    rf.predict()
+    rf_metrics = rf.metrics()
 
-    plot_metrics([ar_metrics, lstm_metrics], ["AutoRegression", "LSTM"])
+    plot_metrics([ar_metrics, lstm_metrics, rf_metrics], ["AutoRegression", "LSTM", "RandomForest"])
 
     return 0
 
