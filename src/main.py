@@ -6,8 +6,6 @@ import pandas as pd
 from lstm import MyLSTM
 from autoregressive import MyAutoregressive
 from randomForest import MyRandomforest
-import warnings
-warnings.filterwarnings("ignore")
 
 def main(argv):
     zip_code = 55448
