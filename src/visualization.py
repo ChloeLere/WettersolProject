@@ -1,16 +1,11 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from xgboost import XGBRegressor
 from sklearn.preprocessing import MinMaxScaler
-
-
 
 class Visualization:
     def __init__(self, data):
         self.data = data
-
 
     def visualization_energy(self):
         plt.figure(figsize=(10, 12))
@@ -26,7 +21,6 @@ class Visualization:
     def visualization_every_column(self):
         plt.figure(figsize=(10, 12))
 
-        # First subplot
         plt.subplot(5, 1, 1)
         plt.plot(self.data.index, self.data["EnergyProduced"])
         plt.xlabel("Date")
@@ -34,7 +28,6 @@ class Visualization:
         plt.title("Energy Production Over Time")
         plt.grid(True)
 
-        # Second subplot
         plt.subplot(5, 1, 2)
         plt.plot(self.data.index, self.data["AverageLufttemperatur"], label="Average Temperature")
         plt.xlabel("Date")
@@ -43,7 +36,6 @@ class Visualization:
         plt.legend()
         plt.grid(True)
 
-        # Third subplot
         plt.subplot(5, 1, 3)
         plt.plot(self.data.index, self.data["AverageNederbördsmängd"], label="Precipitation")
         plt.xlabel("Date")
@@ -52,7 +44,6 @@ class Visualization:
         plt.legend()
         plt.grid(True)
 
-        # Fourth subplot
         plt.subplot(5, 1, 4)
         plt.plot(self.data.index, self.data["AverageSnödjup"], label="Snow Depth")
         plt.xlabel("Date")
@@ -61,7 +52,6 @@ class Visualization:
         plt.legend()
         plt.grid(True)
 
-        # Fifth subplot
         plt.subplot(5, 1, 5)
         plt.plot(self.data.index, self.data["AverageSolskenstid"], label="Sunshine Duration")
         plt.xlabel("Date")
@@ -70,10 +60,7 @@ class Visualization:
         plt.legend()
         plt.grid(True)
 
-        # Adjust layout
         plt.tight_layout()
-
-        # Show the plot
         plt.show()
     
     def normalize(self):
@@ -97,7 +84,6 @@ class Visualization:
     def visualization_with_radiation(self):
         plt.figure(figsize=(10, 12))
 
-        # First subplot
         plt.subplot(2, 1, 1)
         plt.plot(self.data.index, self.data["EnergyProduced"])
         plt.xlabel("Date")
@@ -105,7 +91,6 @@ class Visualization:
         plt.title("Energy Production Over Time")
         plt.grid(True)
 
-        # Second subplot
         plt.subplot(2, 1, 2)
         plt.plot(self.data.index, self.data["UV-irradiation"], label="UV irradiation")
         plt.xlabel("Date")
@@ -115,7 +100,6 @@ class Visualization:
         plt.grid(True)
 
         plt.tight_layout()
-
         plt.show()
 
     def visualization_radiation(self):
@@ -129,5 +113,4 @@ class Visualization:
         plt.grid(True)
 
         plt.tight_layout()
-
         plt.show()

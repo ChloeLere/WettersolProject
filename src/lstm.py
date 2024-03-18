@@ -17,10 +17,14 @@ class MyLSTM:
         self.x_train, self.y_train, self.x_test, self.y_test = time_split(variables, target, training_size=training_size, testing_size=test_size)
         self.scaler = MinMaxScaler()
         self.scaler.fit(self.x_train)
+        self.date_test = self.x_test.index
         self.x_train = self.scaler.transform(self.x_train)
         self.x_test = self.scaler.transform(self.x_test)
         self.model, self.generator = self.create_model()
-        
+        self.mse = 0.0
+        self.rmse = 0.0
+        self.mae = 0.0
+        self.r_squared = 0.0
     
     def create_model(self):
         n_features = 6
@@ -48,24 +52,22 @@ class MyLSTM:
     
     def predict(self):
         to_test = self.x_test.reshape((1, self.test_size, 6))
-        prediction = self.model.predict(to_test)
-        print(prediction)
-        print(self.y_test[0])
-
+        predictions = self.model.predict(to_test)
+        print("Predictions :")
+        for i in range(len(self.y_test)):
+            print('predicted=%f, expected=%f, for the date=%s' % (predictions[0][i], self.y_test[i], self.date_test[i].strftime("%Y-%m-%d")))
+        predictions = np.array(predictions).flatten()
+        true_y = np.array(self.y_test)
+        self.mse = mean_squared_error(true_y, predictions)
+        self.mae = mean_absolute_error(true_y, predictions)
+        self.rmse = np.sqrt(self.mse)
+        self.r_squared = r2_score(true_y, predictions)
 
     def metrics(self):
-        to_test = self.x_test.reshape((1, self.test_size, 6))
-        predictions = np.array(self.model.predict(to_test)).flatten()
-        true_y = np.array(self.y_test)
-        mse = mean_squared_error(true_y, predictions)
-        mae = mean_absolute_error(true_y, predictions)
-        rmse = np.sqrt(mse)
-        r_squared = r2_score(true_y, predictions)
+        print("\nMetrics Long Short Term Memory :")
+        print("Mean Squared Error:", self.mse)
+        print("Mean Absolute Error:", self.mae)
+        print("Root Mean Squared Error:", self.rmse)
+        print("R Squared score:", self.r_squared)
 
-        print("=============================Long short term memory=============================")
-        print("Mean Squared Error:", mse)
-        print("Mean Absolute Error:", mae)
-        print("Root Mean Squared Error:", rmse)
-        print("R Squared score:", r_squared)
-
-        return mse, mae, rmse, r_squared
+        return self.mse, self.mae, self.rmse, self.r_squared

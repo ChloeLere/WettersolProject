@@ -139,9 +139,6 @@ def find_duplicate_dates(dataframe:pd.DataFrame):
             print(temp)
         temp = idx
 
-# Split the dataframe between:
-# X: Variables
-# y: Target Prediction
 def split_xy(dataframe, target_col_name):
     x = dataframe.drop(columns=target_col_name)
     y = dataframe[target_col_name]
@@ -168,7 +165,6 @@ def plot_metrics(metrics, labels):
     index = index = np.arange(num_models)
 
     fig, ax = plt.subplots()
-    #mse_bars = ax.bar(index, mse_values, bar_width, label='MSE')
     mae_bars = ax.bar(index + bar_width, mae_values, bar_width, label='MAE')
     rmse_bars = ax.bar(index + bar_width * 2, rmse_values, bar_width, label='RMSE')
     r_squared_bars = ax.bar(index + bar_width * 3, r_squared_values, bar_width, label='R2')

@@ -35,26 +35,26 @@ class MyAutoregressive:
         x_train, _, x_test, y_test = self.XYs
         predictions = self.model_fit.predict(start=len(x_train), end=len(x_train) + len(x_test) - 1, exog_oos=x_test)
         predictions = self.clamp_negative(predictions)
+        date_test = x_test.index
 
         if display:
+            print("Predictions :")
             for i in range(len(predictions)):
-                print('predicted=%f, expected=%f' % (predictions[i], y_test[i]))
+                print('predicted=%f, expected=%f, for the date=%s' % (predictions[i], y_test[i], date_test[i].strftime("%Y-%m-%d")))
         
         self.mse = mean_squared_error(y_test, predictions)
         self.rmse = self.mse ** 0.5
         self.r_squared = r2_score(y_test, predictions)
         self.mae = mean_absolute_error(y_test, predictions)
 
-    # get the metrics of the last train run
     def metrics(self):
-        print("=================================AutoRegressive=================================")
+        print("\nMetrics Autoregressive :")
         print("Mean Squared Error:", self.mse)
         print("Mean Absolute Error:", self.mae)
         print("Root Mean Squared Error:", self.rmse)
         print("R Squared score:", self.r_squared)
         return self.mse, self.mae, self.rmse, self.r_squared
 
-    # don't use
     def train_2_unused(self):
         for i in range(1, self.lags+1):
             self.data[f'lag_{i}'] = self.data['EnergyProduced'].shift(i)
@@ -69,11 +69,10 @@ class MyAutoregressive:
         model_fit = model.fit()
         print('Coefficients: %s' % model_fit.params)
 
-        y_pred = model_fit.predict(start=len(x_train), end=len(x_train) + len(x_test) - 1, dynamic=False)  # Make predictions
+        y_pred = model_fit.predict(start=len(x_train), end=len(x_train) + len(x_test) - 1, dynamic=False) 
         mse = mean_squared_error(y_test, y_pred)
         rmse = mse ** 0.5
         print(f'Root Mean Squared Error (RMSE): {rmse}')
 
-        #predictions = model_fit.predict(start=len(x_train), end=len(x_train) + len(x_test) - 1, exog_oos=x_test)    
         for i in range(len(y_pred)):
             print('predicted=%f, expected=%f' % (y_pred[i], y_test[i]))

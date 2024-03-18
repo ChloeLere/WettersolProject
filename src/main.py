@@ -6,6 +6,8 @@ import pandas as pd
 from lstm import MyLSTM
 from autoregressive import MyAutoregressive
 from randomForest import MyRandomforest
+import warnings
+warnings.filterwarnings("ignore")
 
 def main(argv):
     zip_code = 55448
@@ -13,30 +15,35 @@ def main(argv):
         zip_code = argv[1]
     data: pd.DataFrame = get_table(str(zip_code))
 
-    # Visualization of the data :
+    # Visualization of the data (uncomment if needed) :
     #visualize_data(data)
     
     # Split the data :
     variables, target = split_xy(data, "EnergyProduced")
 
-    # Long Short Term Memory (need to call everything in this order):
+    # Long Short Term Memory :
     lstm = MyLSTM(variables, target, 5, 400)
     lstm.train()
     lstm.evaluate_loss()
+    print("=============================Long short term memory=============================")
+    lstm.predict()
     lstm_metrics = lstm.metrics()
 
-    # Autegressive
+    # Autegressive :
+    print("=================================AutoRegressive=================================")
     ar = MyAutoregressive(data, lags=5)
     ar.train(0, 400, 5)
-    ar.predict()
+    ar.predict(display=True)
     ar_metrics = ar.metrics()
 
     #Random forest :
+    print("=================================Random  Forest=================================")
     rf = MyRandomforest(variables, target)
     rf.train()
-    rf.predict()
+    rf.predict(display=True)
     rf_metrics = rf.metrics()
 
+    #Plot the result :
     plot_metrics([ar_metrics, lstm_metrics, rf_metrics], ["AutoRegression", "LSTM", "RandomForest"])
 
     return 0
