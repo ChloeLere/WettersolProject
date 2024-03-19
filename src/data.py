@@ -170,8 +170,8 @@ def plot_metrics(metrics, labels):
     r_squared_bars = ax.bar(index + bar_width * 3, r_squared_values, bar_width, label='R2')
 
     ax.set_xlabel('Model')
-    ax.set_ylabel('Loss')
-    ax.set_title('Comparison of Loss Functions')
+    ax.set_ylabel('Score')
+    ax.set_title('Comparison of Score Functions')
     ax.set_xticks(index + 1.5 * bar_width)
     ax.set_xticklabels(labels)
     ax.legend()
